@@ -21,7 +21,7 @@ class Listeners:
         self.mouse_coordinates['x2'], self.mouse_coordinates['y2'] = [round(pos) for pos in mouse.Controller().position]
 
 
-    def on_click(self ,x ,y , button, pressed):
+    def get_bounding_box_on_click(self ,x ,y , button, pressed):
         if all(self.shortcut_start.values()):
             logging.info("keyboard shortcut pressed and mouse clicked, taking screenshot and killing all listeners")
             self.finish_logging_coordinates()
@@ -34,7 +34,7 @@ class Listeners:
             self.keyboard_listener.stop()
             self.mouse_listener_terminator.stop()
 
-    def on_press(self, key):
+    def get_bounding_box_on_press(self, key):
         try:
             self.shortcut_start[key.char] = True
         except AttributeError:
@@ -43,20 +43,13 @@ class Listeners:
             # Start logging coordinates
             self.mouse_coordinates['x1'], self.mouse_coordinates['y1'] = [round(pos) for pos in mouse.Controller().position]
 
-    # def on_release(self, key):
-    #     print('{0} released'.format(
-    #         key))
-    #     if key == keyboard.Key.esc:
-    #         # Stop listener
-    #         return False
-
     def instantiate_terminator_mouse_listener(self):
         return(mouse.Listener(
-            on_click = self.on_click
+            on_click = self.get_bounding_box_on_click
         ))
 
     def instantiate_keyboard_listener_screenshot(self):
         return(keyboard.Listener(
-            on_press = self.on_press
+            on_press = self.get_bounding_box_on_press
             # on_release = self.on_release
         ))
