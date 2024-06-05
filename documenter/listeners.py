@@ -2,39 +2,20 @@ from pynput import mouse, keyboard
 from documenter.coordinates import BoxCoordinates
 import logging
 
-class Listener:
+class Listeners:
     def __init__(self):
-        self.mouse_listener_terminator = self.instantiate_terminator_mouse_listener()
-        self.keyboard_listener = self.instantiate_keyboard_listener_screenshot()
+        #self.mouse_listener_terminator = self.instantiate_terminator_mouse_listener()
+        #self.keyboard_listener = self.instantiate_keyboard_listener_screenshot()
         #self.shortcut_start = {"Key.cmd" : False, "Key.shift" : False, "Key.alt" : False, "4" : False}
         self.shortcut_start = {"Key.cmd" : False, "Key.shift" : False}
         self.mouse_coordinates = dict()
-        self.mouse_listener_terminator.start()
-        self.keyboard_listener.start()
+        #self.mouse_listener_terminator.start()
+        #self.keyboard_listener.start()
     
-    # def on_click(self):
-    #     logging.info('{0} at {1}'.format(
-    #         'Pressed' if pressed else 'Released',
-    #         (x, y)))
-    #     if pressed:
-    #         # Start logging coordinates
-    #         self.mouse_coordinates['x1'] = x
-    #         self.mouse_coordinates['y1'] = y
-    #     if not pressed:
-    #         # Finish logging coordinates
-    #         self.mouse_coordinates['x2'] = x
-    #         self.mouse_coordinates['y2'] = y
-    #         # 
+    def add_listener_and_start(self, listener_name, inst_method):
+        setattr(self, listener_name, inst_method())
+        getattr(self, listener_name).start()
 
-    #         self.mouse_coordinates = BoxCoordinatessl
-    #             x1 = self.mouse_coordinates['x1'],
-    #             x2 = self.mouse_coordinates['x2'],
-    #             y1 = self.mouse_coordinates['y1'],
-    #             y2 = self.mouse_coordinates['y2']
-
-    #         )
-    #         # Stop listener
-    #         return False    
 
     def finish_logging_coordinates(self):
         self.mouse_coordinates['x2'], self.mouse_coordinates['y2'] = [round(pos) for pos in mouse.Controller().position]
