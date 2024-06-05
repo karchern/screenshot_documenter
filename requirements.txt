@@ -4,3 +4,4 @@ pynput
 click
 pillow
 tk
+python-pptx
