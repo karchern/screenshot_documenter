@@ -2,6 +2,10 @@ from documenter.coordinates import BoxCoordinates
 from documenter.listeners import Listeners
 from documenter.grab_screenshot import get_screenshot_from_screen
 import logging
+import tkinter as tk
+from tkinter import simpledialog
+from tkinter.filedialog import asksaveasfile
+
 
 class Runner:
     def __init__(self):
@@ -10,11 +14,15 @@ class Runner:
         self.breakout_listener.add_listener_and_start('breakout_listener', self.breakout_listener.instantiate_breakout_listener)
         self.screenshots = []
 
-    
+    def get_output_file(self):
+        root = tk.Tk()
+        root.withdraw()
+        file = asksaveasfile(mode='w', defaultextension=".txt")
+        return file
+
     def run(self):
-        # TODO: See if there is a better way to do this than a while True loop...
         while True:
-        # Instantiate listener if not already
+        # Instantiate listener if not already/
             if not self.screenshot_listeners:
                 logging.info('Instantiating listener')
                 self.screenshot_listeners = Listeners()
@@ -28,6 +36,7 @@ class Runner:
                 self.screenshot_listeners = None
             if not self.breakout_listener.breakout_listener.running:
                 break
+        output_file = self.get_output_file()
         for screenshot in self.screenshots:
             screenshot.show()
 
