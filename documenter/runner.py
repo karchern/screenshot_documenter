@@ -5,7 +5,9 @@ import logging
 
 class Runner:
     def __init__(self):
-        self.listeners = None
+        self.screenshot_listeners = None
+        self.breakout_listener = Listeners()
+        self.breakout_listener.add_listener_and_start('breakout_listener', self.breakout_listener.instantiate_breakout_listener)
         self.screenshots = []
 
     
@@ -13,18 +15,18 @@ class Runner:
         # TODO: See if there is a better way to do this than a while True loop...
         while True:
         # Instantiate listener if not already
-            if not self.listeners:
+            if not self.screenshot_listeners:
                 logging.info('Instantiating listener')
-                self.listeners = Listeners()
-                self.listeners.add_listener_and_start('mouse_listener_terminator', self.listeners.instantiate_terminator_mouse_listener)
-                self.listeners.add_listener_and_start('keyboard_listener', self.listeners.instantiate_keyboard_listener_screenshot)
+                self.screenshot_listeners = Listeners()
+                self.screenshot_listeners.add_listener_and_start('mouse_listener_terminator', self.screenshot_listeners.instantiate_terminator_mouse_listener)
+                self.screenshot_listeners.add_listener_and_start('keyboard_listener', self.screenshot_listeners.instantiate_keyboard_listener_screenshot)
             
-            if isinstance(self.listeners.mouse_coordinates, BoxCoordinates) and self.listeners:
+            if isinstance(self.screenshot_listeners.mouse_coordinates, BoxCoordinates) and self.screenshot_listeners:
                 logging.info('Coordinates received, taking screenshot')
-                screenshot = get_screenshot_from_screen(self.listeners.mouse_coordinates)
+                screenshot = get_screenshot_from_screen(self.screenshot_listeners.mouse_coordinates)
                 self.screenshots.append(screenshot)
-                self.listeners = None
-            if len(self.screenshots) == 2:
+                self.screenshot_listeners = None
+            if not self.breakout_listener.breakout_listener.running:
                 break
         for screenshot in self.screenshots:
             screenshot.show()
