@@ -1,5 +1,5 @@
 [project]
-name = "fish_analysis"
+name = "screenshot_documenter"
 version = "0.0.1"
 authors = [
   { name="Nicolai Karcher", email="karchernic@gmail.com" },

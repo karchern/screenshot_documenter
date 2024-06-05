@@ -1,1 +1,5 @@
-python
+python==3.11
+pyautogui
+pynput
+click
+pillow
