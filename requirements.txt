@@ -3,3 +3,4 @@ pyautogui
 pynput
 click
 pillow
+tk
