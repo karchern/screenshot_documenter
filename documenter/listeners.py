@@ -23,7 +23,6 @@ class Listeners:
 
     def get_bounding_box_on_click_and_stop_certain_listeners(self ,x ,y , button, pressed):
         if all(self.shortcut_start.values()):
-            logging.info("keyboard shortcut pressed and mouse clicked, taking screenshot and killing all listeners")
             self.finish_logging_coordinates()
             self.mouse_coordinates = BoxCoordinates(
                 x1 = self.mouse_coordinates['x1'],
@@ -37,7 +36,7 @@ class Listeners:
 
     def breakout(self, key):
         if key == keyboard.Key.esc:
-            logging.info('Exiting program')
+            logging.info('Escape pressed, exiting program...')
             return False
 
     def get_bounding_box_on_press(self, key):
