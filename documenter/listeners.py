@@ -2,26 +2,32 @@ from pynput import mouse, keyboard
 from documenter.coordinates import BoxCoordinates
 import logging
 
-class Listeners:
-    def __init__(self):
+class Listener:
+    def __init__(self, reset_exit = True):
         self.shortcut = {"Key.cmd" : False, "Key.shift" : False}
         self.mouse_coordinates = dict()
         self.first_corner_logged = False
-    
-    def add_listener_and_start(self, listener_name, inst_method):
+        self.exit = False
+
+    def reset_listener_attributes(self, listener_name):
+        setattr(self, listener_name, None)
+
+    def overwrite_listener_and_start(self, listener_name, inst_method):
         setattr(self, listener_name, inst_method())
         getattr(self, listener_name).start()
-
 
     def finish_logging_coordinates(self):
         self.mouse_coordinates['x2'], self.mouse_coordinates['y2'] = [round(pos) for pos in mouse.Controller().position]
 
-    def breakout(self, key):
+    # def breakout(self, key):
+    #     if key == keyboard.Key.esc:
+    #         logging.info('Escape pressed, exiting program...')
+    #         return False
+
+    def listen_to_press(self, key):
         if key == keyboard.Key.esc:
             logging.info('Escape pressed, exiting program...')
-            return False
-
-    def get_bounding_box_on_press(self, key):
+            self.exit = True
         try:
             self.shortcut[key.char] = True
         except AttributeError:
@@ -42,13 +48,13 @@ class Listeners:
 
             getattr(self, 'keyboard_listener').stop()
 
-    def instantiate_keyboard_listener_screenshot(self):
+    def instantiate_keyboard_listener(self):
         return(keyboard.Listener(
-            on_press = self.get_bounding_box_on_press
+            on_press = self.listen_to_press
             # on_release = self.on_release
         ))
 
-    def instantiate_breakout_listener(self):
-        return(keyboard.Listener(
-            on_press = self.breakout
-        ))
+    # def instantiate_breakout_listener(self):
+    #     return(keyboard.Listener(
+    #         on_press = self.breakout
+    #     ))

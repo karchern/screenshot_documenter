@@ -1,5 +1,5 @@
 from documenter.coordinates import BoxCoordinates
-from documenter.listeners import Listeners
+from documenter.listeners import Listener
 from documenter.grab_screenshot import get_screenshot_from_screen
 import logging
 import tkinter as tk
@@ -12,9 +12,9 @@ import io
 
 class Runner:
     def __init__(self):
-        self.screenshot_listeners = None
-        self.breakout_listener = Listeners()
-        self.breakout_listener.add_listener_and_start('breakout_listener', self.breakout_listener.instantiate_breakout_listener)
+        self.screenshot_listener = Listener()
+        self.screenshot_listener.overwrite_listener_and_start('keyboard_listener', self.screenshot_listener.instantiate_keyboard_listener)
+        self.exit = False
         self.screenshots = []
 
     def get_output_file(self):
@@ -49,17 +49,13 @@ class Runner:
 
     def run(self):
         while True:
-        # Instantiate listener if not already/
-            if not self.screenshot_listeners:
-                self.screenshot_listeners = Listeners()
-                self.screenshot_listeners.add_listener_and_start('keyboard_listener', self.screenshot_listeners.instantiate_keyboard_listener_screenshot)
-            
-            if isinstance(self.screenshot_listeners.mouse_coordinates, BoxCoordinates) and self.screenshot_listeners:
+            if isinstance(self.screenshot_listener.mouse_coordinates, BoxCoordinates):
                 logging.info('Rectangle coordinates received, taking screenshot...')
-                screenshot = get_screenshot_from_screen(self.screenshot_listeners.mouse_coordinates)
+                screenshot = get_screenshot_from_screen(self.screenshot_listener.mouse_coordinates)
                 self.screenshots.append(screenshot)
-                self.screenshot_listeners = None
-            if not self.breakout_listener.breakout_listener.running:
+                self.screenshot_listener.__init__()
+                self.screenshot_listener.overwrite_listener_and_start('keyboard_listener', self.screenshot_listener.instantiate_keyboard_listener)
+            if self.screenshot_listener.exit:
                 break
         output_file = self.get_output_file()
         self.save_screenshots_as_powerpoint(output_file.name)
