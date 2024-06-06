@@ -1,0 +1,4 @@
+#!/bin/bash -e
+eval "$(conda shell.bash hook)"
+conda activate screenshot_documenter
+python -m documenter
