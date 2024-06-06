@@ -52,9 +52,7 @@ class Runner:
         # Instantiate listener if not already/
             if not self.screenshot_listeners:
                 self.screenshot_listeners = Listeners()
-                self.screenshot_listeners.add_listener_and_start('mouse_listener_terminator', self.screenshot_listeners.instantiate_terminator_mouse_listener)
                 self.screenshot_listeners.add_listener_and_start('keyboard_listener', self.screenshot_listeners.instantiate_keyboard_listener_screenshot)
-
             
             if isinstance(self.screenshot_listeners.mouse_coordinates, BoxCoordinates) and self.screenshot_listeners:
                 logging.info('Rectangle coordinates received, taking screenshot...')
