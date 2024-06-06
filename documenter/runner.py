@@ -2,12 +2,6 @@ from documenter.coordinates import BoxCoordinates
 from documenter.listeners import Listener
 from documenter.grab_screenshot import get_screenshot_from_screen
 import logging
-import tkinter as tk
-from tkinter import simpledialog
-from tkinter.filedialog import asksaveasfile
-
-from pptx import Presentation 
-from pptx.util import Inches
 import io
 
 class Runner:
@@ -16,14 +10,20 @@ class Runner:
         self.screenshot_listener.overwrite_listener_and_start('keyboard_listener', self.screenshot_listener.instantiate_keyboard_listener)
         self.exit = False
         self.screenshots = []
+        logging.critical('Runner initialized, ready to take input...')
 
     def get_output_file(self):
+        import tkinter as tk
+        from tkinter.filedialog import asksaveasfile        
         root = tk.Tk()
         root.withdraw()
         file = asksaveasfile(mode='w', defaultextension=".txt")
         return file
 
     def save_screenshots_as_powerpoint(self, output_file_path):
+
+        from pptx import Presentation 
+        from pptx.util import Inches
 
         if not output_file_path.endswith('.pptx'):
             output_file_path = output_file_path.split('.')[:-1]

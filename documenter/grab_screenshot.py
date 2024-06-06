@@ -3,6 +3,11 @@ import tempfile
 from subprocess import run
 import logging
 from PIL import Image
+import tkinter as tk
+from tkinter.filedialog import asksaveasfile
+
+from pptx import Presentation 
+from pptx.util import Inches
 
 
 def get_screenshot_from_screen(bounding_box: BoxCoordinates = None):
